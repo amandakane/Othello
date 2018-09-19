@@ -1,3 +1,5 @@
+import java.util.Scanner;
+
 public class Othello {
 
     private Board board;
@@ -5,8 +7,19 @@ public class Othello {
 
     public static void main(String[] args) {
         Board board =  new Board(BOARDSIZE);
-        Graphics g = new Graphics();
-        g.initializeGraphics();
+        board.pront();
+
+        Scanner in = new Scanner(System.in);
+
+        while (!board.finished()) {
+            board.checkMoves();
+            board.pront();
+            int x = in.nextInt();
+            int y = in.nextInt();
+            board.move(x, y);
+        }
+        //Graphics g = new Graphics();
+        //g.initializeGraphics();
     }
 
 }

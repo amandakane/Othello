@@ -7,15 +7,45 @@ public class Board {
     int[][] board;
     //IMPORTANT: currentColour is an int where 1 = black and 2 = white. In the board, 3 represents a spot where a piece with colour currentColour can be placed
     int currentColour;
+    //Amount of total pieces on the board
+    int pieceAmount;
 
     public Board(int boardsize) {
         if (boardsize % 2 == 0 && boardsize >= 4) {
             this.boardsize = boardsize;
             board = new int[boardsize][boardsize];
             setup();
+            pieceAmount = 4;
+            //black starts
+            currentColour = 1;
         } else {
             System.out.println("Error!");
         }
+    }
+
+    public void move(int x, int y) {
+        if(board[y][x] == 3) {
+            board[y][x] = currentColour;
+            flip(y, x);
+            pront();
+            pieceAmount++;
+            if(currentColour == 1) {
+                currentColour = 2;
+            } else if (currentColour == 2) {
+                currentColour = 1;
+            } else {
+                System.out.println("ERROR!");
+            }
+        } else {
+            System.out.println("ERROR!");
+        }
+    }
+
+    public boolean finished() {
+        if (pieceAmount == boardsize*boardsize) {
+            return true;
+        }
+        return false;
     }
 
     public void pront() {
@@ -43,17 +73,16 @@ public class Board {
      * checked spot will be marked with a 3, which represents a possible spot to make a move. This process is done for every possible empty cell surrounding every
      * opponent tile set on the board.
      *
-     * @param color to represent who wants to make the move and therefore find the correct opponent existing tiles
      */
-    public void checkMoves(int color) {
+    public void checkMoves() {
         int opponentColor;
-        if (color == 1) {
+        if (currentColour == 1) {
             opponentColor = 2;
         } else {
             opponentColor = 1;
         }
         ArrayList<int[]> opponentSpots = new ArrayList<>();
-        opponentSpots = findOpponentSpots(color, opponentColor);
+        opponentSpots = findOpponentSpots(opponentColor);
         int counter = 0;
         while (counter < opponentSpots.size()) {
             for (int i = -1; i < 2; i++) {
@@ -67,7 +96,7 @@ public class Board {
                             xCoor += temp_i;
                             yCoor += temp_j;
                         }
-                        if (board[xCoor + temp_i][yCoor + temp_j] == color) {
+                        if (board[xCoor + temp_i][yCoor + temp_j] == currentColour) {
                             board[opponentSpots.get(counter)[0]+i][opponentSpots.get(counter)[1]+j] = 3;
                         }
                     }
@@ -75,19 +104,16 @@ public class Board {
             }
             counter++;
         }
-        System.out.println("----------------------");
-        pront();
     }
 
     /**
      * This method goes through the board and finds the coordinates of the opponent tiles already set on the board.
      * Then all these coordinates are saved into arrays, which are saved at the same time within an arrayList.
-     * @param color to represent who wants to make the move and therefore find the correct opponent existing tiles
      * @param opponentColor to represent the opponent color to the variable "color"
      * @return arrayList containing arrays with coordinates x and y of each opponent tile on the board
      */
 
-    public ArrayList<int[]> findOpponentSpots(int color, int opponentColor){
+    public ArrayList<int[]> findOpponentSpots(int opponentColor){
         ArrayList<int[]> opponentSpots = new ArrayList<>();
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < board[0].length; j++) {
