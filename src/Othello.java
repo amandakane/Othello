@@ -12,6 +12,7 @@ public class Othello {
         Scanner in = new Scanner(System.in);
 
         while (!board.finished()) {
+            System.out.println("Current color: " + board.getCurrentColour());
             board.checkMoves();
             board.pront();
             int x = in.nextInt();

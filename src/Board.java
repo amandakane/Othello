@@ -75,6 +75,7 @@ public class Board {
      *
      */
     public void checkMoves() {
+        delete3s();
         int opponentColor;
         if (currentColour == 1) {
             opponentColor = 2;
@@ -127,6 +128,16 @@ public class Board {
         }
         return opponentSpots;
     }
+
+   public void delete3s(){
+        for(int i = 0; i<board.length; i++){
+            for(int j = 0; j<board[0].length; j++){
+                if(board[i][j] == 3){
+                    board[i][j] = 0;
+                }
+            }
+        }
+   }
 
     /**
      * This method is initialized after a piece was placed. It flips the respective pieces of the opponent.
